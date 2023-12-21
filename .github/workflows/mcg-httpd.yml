@@ -1,0 +1,25 @@
+# Use Fedora base image with httpd
+FROM centos:stream9
+
+# Install httpd, PHP, and required extensions
+RUN dnf -y update && \
+    dnf -y install httpd php php-cli php-json php-xml php-mbstring && \
+    dnf clean all
+
+# Install Composer globally
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
+
+# Set up Apache document root
+RUN mkdir -p /var/www/html
+
+# Copy your PHP application files to the container
+COPY . /var/www/html
+
+# Expose the port
+EXPOSE 8080
+
+# Start httpd service
+CMD ["httpd", "-D", "FOREGROUND"]
+
