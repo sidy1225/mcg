@@ -1,5 +1,5 @@
 # Use the Fedora base image
-FROM centos:stream9
+FROM quay.io/centos/centos:stream9
 
 # Install necessary packages
 RUN dnf -y upgrade \
